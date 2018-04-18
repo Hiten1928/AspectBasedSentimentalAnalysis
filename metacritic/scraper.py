@@ -13,7 +13,7 @@ ARRAY_INDICES_REVIEW = {'1' : 3, '2' : 2}
 # Taking user input
 game = input("Game: ")
 plat = input("Platform(pc, xbox-one, playstation-4): ")
-reviewType = input("'1' for CRITIC REVIEWS or '2' for USER REVIEWS: ")
+reviewType = input("'1' for USER REVIEWS or '2' for CRITIC REVIEWS: ")
 
 # Name of file that will contain the data
 fName = game + "-" + plat + "-" + REVIEWS_TYPES_TAG[reviewType] + "-" + time.strftime("%Y-%m-%d %H:%M") + ".csv"
