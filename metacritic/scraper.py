@@ -16,7 +16,7 @@ plat = input("Platform(pc, xbox-one, playstation-4): ")
 reviewType = input("'1' for USER REVIEWS or '2' for CRITIC REVIEWS: ")
 
 # Name of file that will contain the data
-fName = game + "-" + plat + "-" + REVIEWS_TYPES_TAG[reviewType] + "-" + time.strftime("%Y-%m-%d %H:%M") + ".csv"
+fName = "new/" + game + "-" + plat + "-" + REVIEWS_TYPES_TAG[reviewType] + "-" + time.strftime("%Y-%m-%d %H:%M") + ".csv"
 
 # Opening the csv file
 file = open(fName, 'w')
@@ -48,16 +48,22 @@ while (pageCounter < lastPage):
 
 	# Parsing the reviews, each iteration is a review
 	for review in reviews:
+		# Getting the username
+		user = review.find('div', attrs={'class': 'name'}).text.strip()
+		# Getting the date
+		date = review.find('div', attrs={'class': 'date'}).text.strip()
 		# Getting the score
 		score = review.find('div', attrs={'class': 'review_grade'}).text.strip()
-
 		# Unscored reviews in the critics section
 		if not score:
 			score = "IN PROGRESS & UNSCORED"
 
+		reviewBody = review.find('div', attrs={'class': 'review_body'}).text
+		reviewBody = reviewBody.replace("\r", "").replace("\n", "").replace("… Expand", "").replace("Read full review", "")
+		time.sleep(0.06)
 		# Writing to the csv file
-		file.write(score + "," + 
-			review.find('div', attrs={'class': 'review_body'}).text.replace("… Expand", "").replace(",", "").replace("\n", "").replace("Read full review", "").strip() + ",")
+		file.write(date + "," + user + "," + score + "," + reviewBody + "\n")
+			# replace("… Expand", "").replace(",", "").replace("\n", "").replace("\r", "").replace("Read full review", "").strip() + ",\n")
 
 	# Getting last page and comparing it to current, could be factored out
 	try:
