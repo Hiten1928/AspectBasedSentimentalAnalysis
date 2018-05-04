@@ -7,8 +7,11 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 
-ef create_sentiments_pandas_frame():
+
+def create_sentiments_pandas_frame():
     data = pd.read_csv("C:\\Users\ROSS\Documents\Study\Software Quality\Train_Set.csv")
     processed_data = data.copy()
     processed_data['sentiment'] = processed_data['Polarity'].apply(lambda x: 0 if x == 'negative' else 1)
+    processed_data['text_clean'] = processed_data['Text']
+    processed_data = processed_data.loc[:, ['text_clean', 'sentiment']]
     return processed_data
