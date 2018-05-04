@@ -8,6 +8,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 
 
+# Function to read csv & create pandas dataframe
 def create_sentiments_pandas_frame():
     data = pd.read_csv("C:\\Users\ROSS\Documents\Study\Software Quality\Train_Set.csv")
     processed_data = data.copy()
