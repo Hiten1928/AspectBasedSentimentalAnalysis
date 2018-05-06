@@ -8,20 +8,22 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 
 
-# Function to read csv & create pandas dataframe
+#Function to read csv & create pandas dataframe
 def create_sentiments_pandas_frame():
-    data = pd.read_csv("C:\\Users\ROSS\Documents\Study\Software Quality\Train_Set.csv")
+    data = pd.read_csv("Train_Set.csv")
     processed_data = data.copy()
     processed_data['sentiment'] = processed_data['Polarity'].apply(lambda x: 0 if x == 'negative' else 1)
+    # print(data_clean)
     processed_data['text_clean'] = processed_data['Text']
     processed_data = processed_data.loc[:, ['text_clean', 'sentiment']]
     return processed_data
 
 
-# Function to vectorize and split the data set
+#Function to vectorize and split the data set
 def create_sentiments_test_train_set(processed_data):
     X = processed_data['text_clean']
     y = processed_data['sentiment']
+
     # Using CountVectorizer to convert text into tokens/features
     vectorizer = CountVectorizer(stop_words='english', ngram_range=(1, 1), max_df=.80, min_df=4)
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1, test_size=0.3)
@@ -29,10 +31,11 @@ def create_sentiments_test_train_set(processed_data):
     vectorizer.fit(X_train)
     X_train_dtm = vectorizer.transform(X_train)
     X_test_dtm = vectorizer.transform(X_test)
+
     return X, y, X_train, X_test, y_train, y_test, X_train_dtm, X_test_dtm, vectorizer
 
 
-# Function to implement prediction using naive bayesian
+#Function to implement prediction using naive bayesian
 def prediction_naive_bayesian(X_train_dtm, y_train, X_test_dtm, y_test):
     NB = MultinomialNB()
     NB.fit(X_train_dtm, y_train)
@@ -71,6 +74,7 @@ def print_metric_results(classifier,y_test, y_pred):
     print('Precision Score: ', metrics.precision_score(y_test, y_pred) * 100, '%', sep='')
     print('Recall Score: ', metrics.recall_score(y_test, y_pred) * 100, '%', sep='')
     print('F1-Score: ', metrics.f1_score(y_test, y_pred) * 100, '%', sep='')
+    print(metrics.classification_report(y_test, y_pred))
     print('Confusion Matrix: ', metrics.confusion_matrix(y_test, y_pred), sep='\n')
 
 
@@ -117,12 +121,13 @@ def main():
     predict_knn(X_train_dtm, y_train, X_test_dtm, y_test)
     print_review_sentiment(vectorizer, X_train_dtm, X_test_dtm, y_train, X_test, y_test)
 
-    custom_review = []
-    print("**************************************************************************************************************")
-    print('Enter review to predict sentiment: ', end=" ")
-    custom_review.append(input())
-    analyze_custom_input_review_sentiment(custom_review, X, y)
+    # custom_review = []
+    # print("**************************************************************************************************************")
+    # print('Enter review to predict sentiment: ', end=" ")
+    # custom_review.append(input())
+    # analyze_custom_input_review_sentiment(custom_review, X, y)
 
 
 if __name__ == '__main__':
     main()
+
