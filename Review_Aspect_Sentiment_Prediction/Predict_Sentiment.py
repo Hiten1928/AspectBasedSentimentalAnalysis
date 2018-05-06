@@ -32,9 +32,33 @@ def create_sentiments_test_train_set(processed_data):
     return X, y, X_train, X_test, y_train, y_test, X_train_dtm, X_test_dtm, vectorizer
 
 
-#Function to implement prediction using naive bayesian
+# Function to implement prediction using naive bayesian
 def prediction_naive_bayesian(X_train_dtm, y_train, X_test_dtm, y_test):
     NB = MultinomialNB()
     NB.fit(X_train_dtm, y_train)
     y_pred = NB.predict(X_test_dtm)
     print_metric_results("Naive Bayes", y_test, y_pred)
+
+
+#Function to implement prediction using logistic regression
+def prediction_logistic_regression(X_train_dtm, y_train,X_test_dtm, y_test):
+    LR = LogisticRegression()
+    LR.fit(X_train_dtm, y_train)
+    y_pred = LR.predict(X_test_dtm)
+    print_metric_results("Logistic Regression", y_test, y_pred)
+
+
+#Function to implement prediction using linear svm
+def prediction_linear_svm(X_train_dtm, y_train, X_test_dtm, y_test):
+    SVM = LinearSVC()
+    SVM.fit(X_train_dtm, y_train)
+    y_pred = SVM.predict(X_test_dtm)
+    print_metric_results("SVM", y_test, y_pred)
+
+
+#Function to implement prediction using KNN
+def predict_knn(X_train_dtm, y_train, X_test_dtm, y_test):
+    KNN = KNeighborsClassifier(n_neighbors=3)
+    KNN.fit(X_train_dtm, y_train)
+    y_pred = KNN.predict(X_test_dtm)
+    print_metric_results("K Nearest Neighbors (NN = 3)", y_pred, y_test)
