@@ -22,7 +22,6 @@ def create_sentiments_pandas_frame():
 def create_sentiments_test_train_set(processed_data):
     X = processed_data['text_clean']
     y = processed_data['sentiment']
-
     # Using CountVectorizer to convert text into tokens/features
     vectorizer = CountVectorizer(stop_words='english', ngram_range=(1, 1), max_df=.80, min_df=4)
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1, test_size=0.3)
@@ -30,5 +29,12 @@ def create_sentiments_test_train_set(processed_data):
     vectorizer.fit(X_train)
     X_train_dtm = vectorizer.transform(X_train)
     X_test_dtm = vectorizer.transform(X_test)
-
     return X, y, X_train, X_test, y_train, y_test, X_train_dtm, X_test_dtm, vectorizer
+
+
+#Function to implement prediction using naive bayesian
+def prediction_naive_bayesian(X_train_dtm, y_train, X_test_dtm, y_test):
+    NB = MultinomialNB()
+    NB.fit(X_train_dtm, y_train)
+    y_pred = NB.predict(X_test_dtm)
+    print_metric_results("Naive Bayes", y_test, y_pred)
