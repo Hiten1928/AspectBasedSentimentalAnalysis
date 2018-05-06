@@ -62,3 +62,67 @@ def predict_knn(X_train_dtm, y_train, X_test_dtm, y_test):
     KNN.fit(X_train_dtm, y_train)
     y_pred = KNN.predict(X_test_dtm)
     print_metric_results("K Nearest Neighbors (NN = 3)", y_pred, y_test)
+
+
+#Function to print_metric_prediction_results
+def print_metric_results(classifier,y_test, y_pred):
+    print(classifier)
+    print('Accuracy Score: ', metrics.accuracy_score(y_test, y_pred) * 100, '%', sep='')
+    print('Precision Score: ', metrics.precision_score(y_test, y_pred) * 100, '%', sep='')
+    print('Recall Score: ', metrics.recall_score(y_test, y_pred) * 100, '%', sep='')
+    print('F1-Score: ', metrics.f1_score(y_test, y_pred) * 100, '%', sep='')
+    print('Confusion Matrix: ', metrics.confusion_matrix(y_test, y_pred), sep='\n')
+
+
+#Function to print tokens and their sentiment type from the train set
+def analyze_custom_input_review_sentiment(test, X, y):
+    trainingVector = CountVectorizer(stop_words='english', ngram_range=(1, 1), max_df=.80, min_df=5)
+    trainingVector.fit(X)
+    X_dtm = trainingVector.transform(X)
+    nb_complete = MultinomialNB()
+    nb_complete.fit(X_dtm, y)
+
+    test_dtm = trainingVector.transform(test)
+    predicted_label = nb_complete.predict(test_dtm)
+    tags = ['Negative', 'Positive']
+    print('The review sentiment is ', tags[predicted_label[0]])
+
+
+#Function to print sentiment predictions for custom review input by user
+def print_review_sentiment(vectorizer, X_train_dtm, X_test_dtm, y_train, X_test, y_test):
+    NB = MultinomialNB()
+    NB.fit(X_train_dtm, y_train)
+    tokens_words = vectorizer.get_feature_names()
+    print('\nAnalysis')
+    print('No. of tokens: ', len(tokens_words))
+    counts = NB.feature_count_
+    df_table = {'Token': tokens_words, 'Negative': counts[0, :], 'Positive': counts[1, :]}
+
+    tokens = pd.DataFrame(df_table, columns=['Token', 'Positive', 'Negative'])
+    positives = len(tokens[tokens['Positive'] > tokens['Negative']])
+    print("token_words", tokens_words)
+    print('No. of positive tokens: ', positives)
+    print('No. of negative tokens: ', len(tokens_words) - positives)
+    print("**************************************************************************************************************")
+    print("Identified Positive/Negative tokens and their values")
+    print("tokens", tokens)
+
+
+def main():
+    processed_data = create_sentiments_pandas_frame()
+    X, y, X_train, X_test, y_train, y_test, X_train_dtm, X_test_dtm, vectorizer = create_sentiments_test_train_set(processed_data)
+    prediction_naive_bayesian(X_train_dtm, y_train, X_test_dtm, y_test)
+    prediction_logistic_regression(X_train_dtm, y_train, X_test_dtm, y_test)
+    prediction_linear_svm(X_train_dtm, y_train, X_test_dtm, y_test)
+    predict_knn(X_train_dtm, y_train, X_test_dtm, y_test)
+    print_review_sentiment(vectorizer, X_train_dtm, X_test_dtm, y_train, X_test, y_test)
+
+    custom_review = []
+    print("**************************************************************************************************************")
+    print('Enter review to predict sentiment: ', end=" ")
+    custom_review.append(input())
+    analyze_custom_input_review_sentiment(custom_review, X, y)
+
+
+if __name__ == '__main__':
+    main()
