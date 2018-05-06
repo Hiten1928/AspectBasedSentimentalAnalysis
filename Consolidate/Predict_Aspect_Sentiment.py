@@ -1,8 +1,7 @@
-from Sentiment.Predict_Sentiment import analyze_custom_input_review_sentiment, create_sentiments_pandas_frame, create_sentiments_test_train_set
-from Aspect.Predict_Aspect import analyze_custom_input_review_aspect, create_aspects_pandas_frame, create_aspect_test_train_set
+from SentimentalAnalysis.Sentiment.Predict_Sentiment import analyze_custom_input_review_sentiment, create_sentiments_pandas_frame, create_sentiments_test_train_set
+from SentimentalAnalysis.Aspect.Predict_Aspect import analyze_custom_input_review_aspect, create_aspects_pandas_frame, create_aspect_test_train_set
 
 
-#process data to create dataframes with polarity and category/aspect
 processed_sentiments_data = create_sentiments_pandas_frame()
 processed_aspects_data = create_aspects_pandas_frame()
 
